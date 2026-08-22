@@ -18,7 +18,7 @@
 | **08.22 토 (1d)**           | **2. 집계 및 피처 엔지니어링 (Feature Engineering)**                                                            | 💨       |
 | 08.22 토 (1d)               | 2-1. 범주형 피처 인코딩<br> - `CASE WHEN` 및 `PIVOT`을 이용한 One-Hot Encoding 형태의 원시 피처 생성                        | ✅        |
 | 08.22 토 (1d)               | 2-2. 집계 피처 생성<br> - `GROUP BY`, `HAVING` 및 조건별 집계(`COUNT(CASE WHEN ...)`, `SUM(CASE WHEN...)`)        | ✅        |
-| 08.22 토 (1d)               | 2-3. 집합 연산 및 중복 제거<br> - `UNION ALL`, `INTERSECT`, `EXCEPT`를 통한 통합 학습용 데이터셋 구성                        | ⬜        |
+| 08.22 토 (1d)               | 2-3. 집합 연산 및 중복 제거<br> - `UNION ALL`, `INTERSECT`, `EXCEPT`를 통한 통합 학습용 데이터셋 구성                        | 💨       |
 | **08.23 일 (1d)**           | **3. 고급 결합 및 파이프라인 구조화**                                                                              | ⬜        |
 | 08.23 일 (1d)               | 3-1. 다중 및 비등가 조인(Non-Equi Join)<br> - `LEFT JOIN`, `FULL OUTER JOIN`, 범위 조건 기반 조인을 활용한 레이블 데이터 결합     | ⬜        |
 | 08.23 일 (1d)               | 3-2. CTE와 가독성 최적화<br> - `WITH` 절(Common Table Expression)을 활용한 복잡한 ML 데이터 추출 흐름 모듈화                   | ⬜        |
