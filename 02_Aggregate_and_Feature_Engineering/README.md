@@ -7,3 +7,4 @@
   * `GROUP BY`, `HAVING` 및 조건별 집계(`COUNT(CASE WHEN ...)`, `SUM(CASE WHEN...)`)
 * [2-3. 집합 연산 및 중복 제거](02_03_set_and_remove_duplicate.md)
   * `UNION ALL`, `INTERSECT`, `EXCEPT`를 통한 통합 학습용 데이터셋 구성
+  * 목적: **의도적으로 포함된 중복 행을 제거하고 유일한 레코드만 추출**
