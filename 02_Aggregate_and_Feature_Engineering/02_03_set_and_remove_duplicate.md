@@ -22,7 +22,7 @@
 
 * 기본 구문은 다음과 같다.
 
-```
+```sql
 SELECT column_1, column_2, ... FROM table_1
 UNION ALL
 SELECT column_1, column_2, ... FROM table_2
@@ -34,7 +34,7 @@ SELECT column_1, column_2, ... FROM table_2
 
 * 기본 구문은 다음과 같다.
 
-```
+```sql
 SELECT column_1, column_2, ... FROM table_1
 INTERSECT
 SELECT column_1, column_2, ... FROM table_2
@@ -46,7 +46,7 @@ SELECT column_1, column_2, ... FROM table_2
 
 * 기본 구문은 다음과 같다.
 
-```
+```sql
 SELECT column_1, column_2, ... FROM table_1
 EXCEPT
 SELECT column_1, column_2, ... FROM table_2
@@ -62,7 +62,7 @@ SELECT column_1, column_2, ... FROM table_2
 
 * 예제 SQL
 
-```
+```sql
 select distinct mle_id,
     department_team,
     prior_experience_years,

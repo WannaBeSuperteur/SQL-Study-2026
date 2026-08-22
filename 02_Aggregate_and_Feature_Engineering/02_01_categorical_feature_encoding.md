@@ -23,7 +23,7 @@
   * ```primary_framework``` 값에 따라 (```PyTorch```, ```TensorFlow```, ```Scikit-Learn```, ```JAX```) one-hot encoding 
   * ```candidate_source``` 값에 따라 (```Referral```, ```Direct Apply```, ```Agency```, ```Campus Recruitment```) one-hot encoding
 
-```
+```sql
 select mle_id,
        primary_framework,
        case when primary_framework = 'PyTorch' then 1 else 0 end as pf_pytorch,
@@ -83,7 +83,7 @@ MLE-2023-0013|Scikit-Learn     |         0|    0|         1|     0|Referral     
 
 * 예시
 
-```
+```sql
 select mle_id,
        skills_list,
        case when skills_list LIKE '%Python%' then 1 else 0 end as skill_python,

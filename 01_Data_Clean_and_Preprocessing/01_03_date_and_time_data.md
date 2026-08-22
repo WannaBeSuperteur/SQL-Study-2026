@@ -31,7 +31,7 @@
   * 입사 1주년 (```first_anniversary```) 는 입사 1년 후
   * 최종 합격 통보 (```final_accepted```) 는 입사 14일 (2주) 전
 
-```
+```sql
 SELECT mle_id,
 	   hire_date,
 	   eval_date,
@@ -69,7 +69,7 @@ MLE-2023-0005|2023-12-11|2024-03-10|2023-12-11 09:00:00|2023-12-12     |2024-03-
 
 * 예시
 
-```
+```sql
 select NOW();
 ```
 
@@ -99,7 +99,7 @@ NOW()              |
   * `+nn:00` 시간대로 표시된 시각을 `+mm:00` 시간대로 변경한다.
 * 예시
 
-```
+```sql
 SELECT mle_id,
 	   last_commit_timestamp,
 	   CONVERT_TZ(last_commit_timestamp, '+00:00', '+09:00') as last_commit_timestamp_kst

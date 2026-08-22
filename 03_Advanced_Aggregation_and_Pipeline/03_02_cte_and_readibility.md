@@ -30,7 +30,7 @@ CTE를 정의하기 위한 `WITH` 문의 사용법은 다음과 같다.
 
 * ```WITH name AS``` 에서 CTE를 `name`으로 정의했고, 이를 아래쪽에서 `SELECT ... FROM name ...` 으로 활용하고 있다.
 
-```
+```sql
 WITH name AS (
     SELECT ...
     FROM ...
@@ -47,7 +47,7 @@ FROM name
 
 * SQL 문
 
-```
+```sql
 with probation_failed_employees as (
     select mle_id,
            max(eval_performance_score) as final_perf,
@@ -97,7 +97,7 @@ MLE-2023-0398|     71.59|     67.64|     70.31|             209.54|
 * 해당 부분은 `probation_failed_employees` 에서 `final_score` 로 통합되었다.
 * 추가된 별도의 CTE는 `probation_result_for_each_employee` 이다.
 
-```
+```sql
 with probation_result_for_each_employee as (
     select mle_id,
            max(eval_performance_score) as final_perf,

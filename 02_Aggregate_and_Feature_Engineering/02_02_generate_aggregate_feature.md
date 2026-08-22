@@ -23,7 +23,7 @@
 
 * ```candidate_source``` (채용 경로) 별 성과, 역량, 태도 평균 점수
 
-```
+```sql
 select candidate_source,
        avg(eval_performance_score) as avg_perf,
        avg(eval_competency_score) as avg_comp,
@@ -45,7 +45,7 @@ Campus Recruitment|82.82464052287581|80.92915032679737|75.77816993464052|
 
 * ```candidate_source``` (채용 경로) 및 ```primary_framework``` (주 사용 프레임워크) 별 성과, 역량, 태도 평균 점수
 
-```
+```sql
 select candidate_source,
        primary_framework,
        avg(eval_performance_score) as avg_perf,
@@ -85,7 +85,7 @@ Referral          |JAX              |82.36550724637681|80.29362318840585|76.5439
 * ```candidate_source``` (채용 경로) 및 ```primary_framework``` (주 사용 프레임워크) 별 성과, 역량, 태도 평균 점수
 * 단, 이번에는 **태도 평균 점수가 80점 이상** 인 케이스만 추출
 
-```
+```sql
 select candidate_source,
        primary_framework,
        avg(eval_performance_score) as avg_perf,
@@ -112,7 +112,7 @@ Agency          |Scikit-Learn     |84.25679487179487|77.35153846153845|80.409615
 * 성과, 역량, 태도가 모두 90점 이상인 직원에 대한 전체 기록 개수
   * 조건을 만족시키면 **1 을 반환** 하도록 한다.
 
-```
+```sql
 select COUNT(case when eval_performance_score >= 90
              and eval_competency_score >= 90
              and eval_attitude_score >= 90 then 1 END) as best_employee_count
@@ -130,7 +130,7 @@ best_employee_count|
 * 성과, 역량, 태도가 모두 90점 이상인 직원의 각 기록 시점의 commit 개수 합산
   * 조건을 만족시키면 **```code_commits_cnt``` 열의 값을 반환** 하도록 한다.
 
-```
+```sql
 select SUM(case when eval_performance_score >= 90
              and eval_competency_score >= 90
              and eval_attitude_score >= 90 then code_commits_cnt END) as best_employee_commits_sum

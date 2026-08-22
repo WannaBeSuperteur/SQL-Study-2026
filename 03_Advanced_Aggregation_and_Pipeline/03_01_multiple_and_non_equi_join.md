@@ -12,7 +12,7 @@
 
 * 예시
 
-```
+```sql
 select distinct p.mle_id,
                 p.primary_framework,
                 m.name,
@@ -46,7 +46,7 @@ MLE-2024-0009|None             |신준혁 |1988-03-26|남성    |
 * MySQL에서는 **해당 구문을 지원하지 않는다.**
 * MySQL에서 대신 사용하려면 다음과 같이 **LEFT JOIN, RIGHT JOIN 을 결합** 해야 한다.
 
-```
+```sql
 select distinct coalesce(p.mle_id, m.mle_id) as mle_id,
        p.primary_framework,
        m.name,
@@ -92,7 +92,7 @@ MLE-2024-0009|None             |신준혁 |1988-03-26|남성    |
 
 * 예제 SQL
 
-```
+```sql
 with grade_tier as (
 	select 'A' as grade, 85.0 as min_score, 100.1 as max_score union all
 	select 'B' as grade, 70.0 as min_score, 85.0 as max_score union all
@@ -160,7 +160,7 @@ MLE-2023-0005|             3|     72.72|B         |     100.0|A         |     85
 
 * 예제 SQL
 
-```
+```sql
 with first_month_performance as (
     select mle_id,
            code_commits_cnt as commits,

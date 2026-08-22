@@ -24,7 +24,7 @@
 * 예시
   * `mentor_id` 가 NULL 이면 `mle_id`, 즉 자기 자신을 `true_mentor_id`로 지정 
 
-```
+```sql
 SELECT mle_id,
        mentor_id,
        COALESCE(mentor_id, mle_id) AS true_mentor_id
@@ -65,7 +65,7 @@ MLE-2023-0010|         |MLE-2023-0010 |
 * 예시
   * 성과 평가 점수 (`eval_performance_score`) 와 역량 평가 점수 (`eval_competency_score`) 가 서로 같은지 확인
 
-```
+```sql
 SELECT mle_id,
        eval_performance_score,
        eval_competency_score,
@@ -107,7 +107,7 @@ MLE-2023-0019|                 83.41|                95.35|               83.41|
 
 * 예시
 
-```
+```sql
 SELECT mle_id,
        eval_performance_score,
        eval_competency_score,

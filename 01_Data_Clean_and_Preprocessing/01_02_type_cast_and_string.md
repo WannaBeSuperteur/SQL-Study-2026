@@ -39,7 +39,7 @@
 
 * 예시
 
-```
+```sql
 SELECT mle_id,
        eval_performance_score,
        CAST(eval_performance_score AS varchar) as eval_perf_varchar,
@@ -69,7 +69,7 @@ MLE-2023-0004|                 61.54|61.54            |           61|
 * 예시
   * `skills_list` 컬럼에 `SQL`이 포함된 경우만 필터링
 
-```
+```sql
 SELECT mle_id,
 	   skills_list,
        eval_month_seq AS month,
@@ -112,7 +112,7 @@ MLE-2024-0015|PyTorch;Git;SQL;Ray                          |    3|      78.48|  
 
 * 예시
 
-```
+```sql
 SELECT mle_id,
 	   last_commit_timestamp,
 	   REGEXP_REPLACE(last_commit_timestamp,
@@ -143,7 +143,7 @@ MLE-2023-0005|2024-03-08 10:00:00+09:00|2024-03-08      |
 * 예시
   * ```SQL``` 이라는 skill이 ```sql_skills``` 의 몇 번째 글자에 등장하는지 확인 
 
-```
+```sql
 SELECT mle_id,
        eval_month_seq AS month,
 	   skills_list,
@@ -179,7 +179,7 @@ MLE-2024-0011|    3|Git;SQL;Kubeflow;CUDA;TensorFlow             |             5
 * 예시
   * ```SQL``` 을 포함한 그 이전에 등장하는 ```skills``` 의 리스트 반환
 
-```
+```sql
 SELECT mle_id,
        eval_month_seq AS month,
 	   skills_list,
