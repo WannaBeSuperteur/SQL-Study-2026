@@ -7,3 +7,8 @@
   * `OVER (PARTITION BY ... ORDER BY ... ROWS BETWEEN)`을 이용한 Rolling Feature 생성
 * [4-3. 시퀀스 데이터 및 지연 처리](04_03_sequential_data.md)
   * `LAG`, `LEAD` 함수를 활용한 이전/이후 시점 이벤트 추적 및 시계열 피처 구성
+
+**[ SPECIAL PROJECT ]**
+
+* 각 직원의 수습 평가 점수를 수능처럼 순위 매기기
+* [프로젝트 문서](04_04_special_evaluation_cutoff.md)
