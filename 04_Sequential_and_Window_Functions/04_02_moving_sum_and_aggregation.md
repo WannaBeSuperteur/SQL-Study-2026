@@ -43,5 +43,54 @@
 
 ## 2. 기본 `OVER (PARTITION BY ... ORDER BY ...)` 예제
 
+* 목표
+  * `PyTorch`를 주 프레임워크로 사용하는 머신러닝 엔지니어들을 `candidate_source` (입사 경로) 별 파티션을 나눈다.
+  * 이렇게 나눈 각 파티션 별로 **성과, 역량, 태도 점수의 합산 점수 및 그 순위** 를 표시한다. (최상위 점수부터)
+
+* 예제 SQL
+
+```sql
+with avg_probation_score as (
+    select mle_id,
+           avg(eval_performance_score) as performance,
+           avg(eval_competency_score) as competency,
+           avg(eval_attitude_score) as attitude,
+           avg(eval_performance_score) + avg(eval_competency_score) + avg(eval_attitude_score) as total
+    from probation_data
+    group by mle_id
+)
+select distinct coalesce (aps.mle_id, pd.mle_id) as mle_id,
+       round(aps.performance, 2) as performance,
+       round(aps.competency, 2) as competency,
+       round(aps.attitude, 2) as attitude,
+       round(aps.total, 2) as total_score,
+       pd.candidate_source,
+       dense_rank() over (partition by pd.candidate_source order by aps.total desc) as ranking
+from probation_data as pd
+join avg_probation_score as aps on pd.mle_id = aps.mle_id
+where pd.primary_framework = 'PyTorch'
+```
+
+* 실행 결과
+
+```
+mle_id       |performance|competency|attitude|total_score|candidate_source  |ranking|
+-------------+-----------+----------+--------+-----------+------------------+-------+
+MLE-2023-0289|      94.03|     100.0|   93.13|     287.16|Agency            |      1|
+MLE-2024-0317|      91.51|     91.54|   93.09|     276.14|Agency            |      2|
+MLE-2023-0173|      86.05|     96.96|   92.04|     275.05|Agency            |      3|
+
+...
+
+MLE-2023-0076|      77.12|     62.46|   78.86|     218.45|Agency            |     24|
+MLE-2024-0075|      63.77|     74.21|   79.07|     217.05|Agency            |     25|
+MLE-2023-0373|      79.62|     66.92|   62.39|     208.92|Agency            |     26|
+MLE-2023-0143|      81.34|     97.72|   75.06|     254.13|Campus Recruitment|      1|
+MLE-2024-0088|      94.13|     97.77|   61.61|     253.51|Campus Recruitment|      2|
+MLE-2023-0333|       68.2|     95.77|   89.08|     253.05|Campus Recruitment|      3|
+
+...
+```
+
 ## 3. Rolling Feature 생성 예제
 
