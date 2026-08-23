@@ -100,7 +100,7 @@ MLE-2023-0333|       68.2|     95.77|   89.08|     253.05|Campus Recruitment|   
 
 * 예제 SQL
 
-```
+```sql
 with monthly_avg_score as (
     select year(eval_date) as eval_year,
         month(eval_date) as eval_month,

@@ -125,7 +125,7 @@ score_rank|mle_id       |name|gender|birth_date|eval_month_seq|score_sum|
 
 * SQL 쿼리
 
-```
+```sql
 with probation_score_sum as (
     select mle_id,
            eval_month_seq,
@@ -173,7 +173,7 @@ dense_ranking|mle_id       |eval_month_seq|score_sum_r2|score_sum_r0|
 
 * SQL 쿼리 (`NTILE` 결과 추출)
 
-```
+```sql
 with probation_score as (
     select mle_id,
            avg(eval_performance_score) + avg(eval_competency_score) + avg(eval_attitude_score) as score
