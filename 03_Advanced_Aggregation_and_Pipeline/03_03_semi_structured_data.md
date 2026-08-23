@@ -75,7 +75,7 @@ cross join JSON_TABLE(
 | SQL 구문                                      | 설명                                                                                                    |
 |---------------------------------------------|-------------------------------------------------------------------------------------------------------|
 | `cross join JSON_TABLE(...`                 | - `cross join` 을 통해 두 테이블의 **모든 행을 조합 (카티션 곱)** 계산<br>- `JSON_TABLE`의 첫 인자는 **JSON 데이터/문자열을 추출할 컬럼명** |
-| `$`                                         | json을 추출할 path ('$' 의 경우 json의 **최상위 root**)                                                          |
+| `$`                                         | json을 추출할 path (`$` 의 경우 json의 **최상위 root**)                                                          |
 | `columns`                                   | json으로부터 추출할 컬럼 리스트                                                                                   |
 | `github_star INTEGER path '$.github_stars'` | JSON 내부의 `github_stars` 로부터 데이터를 가져와서 `github_star` 컬럼을 추가하여 저장                                       |
 
