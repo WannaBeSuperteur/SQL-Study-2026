@@ -10,9 +10,27 @@
 
 ## 1. 함수 설명
 
+`LAG` 함수와 `LEAD` 함수는 **특정 행을 기준으로 이전/다음 행의 값을 반환** 하는 함수이다.
+
 ### 1-1. `LAG` 함수
 
+`LAG` 함수는 **직전 행의 값을 추출** 하는 함수이다.
+
+* 구문
+
+```sql
+LAG(column_name) OVER (PARTITION BY ... ORDER BY ...)
+```
+
 ### 1-2. `LEAD` 함수
+
+`LEAD` 함수는 **직후 행의 값을 추출** 하는 함수이다.
+
+* 구문
+
+```sql
+LEAD(column_name) OVER (PARTITION BY ... ORDER BY ...)
+```
 
 ## 2. 실전 예제
 
