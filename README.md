@@ -1,6 +1,6 @@
 # SQL-Study-2026
 
-**[주의] csv 파일 2개 ([mle_employee_personal_info.csv](mle_employee_personal_info.csv), [mle_probation_evaluation_dataset.csv](mle_probation_evaluation_dataset.csv)) 는 Gemini 로 생성한 가상 (허구) 정보로, 실존 인물의 정보와 관련이 없습니다.**
+**[주의] csv 파일 3개 ([mle_employee_personal_info.csv](mle_employee_personal_info.csv), [mle_probation_evaluation_dataset.csv](mle_probation_evaluation_dataset.csv), [mle_classification.csv](mle_classification.csv)) 는 Gemini 로 생성한 가상 (허구) 정보로, 실존 인물의 정보와 관련이 없습니다.**
 
 학습 계획
 
