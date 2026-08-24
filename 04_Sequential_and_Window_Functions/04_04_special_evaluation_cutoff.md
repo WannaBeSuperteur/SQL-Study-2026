@@ -17,7 +17,7 @@
   * **성과, 역량, 태도 및 합산 점수** 에 대한 **1~8 등급컷** 을 산출한다.
   * 해당 결과로 **각 직원의 성과, 역량, 태도, 합산 점수에 대한 등급을 산출** 한다. 
 * 미리 정의된 **직원 분류 기준표** 에 따라 직원을 분류한 결과 column을 각 직원에 대해 추가한다.
-* **직원 분류 기준표**의 각 기준에 속하는 직원의 인원수 비율 정보 및 해당 직원의 리스트를 각각 테이블 형태로 저장한다.
+* **직원 분류 기준표**의 각 기준에 속하는 직원의 인원수 및 비율 정보 및 해당 직원의 리스트를 각각 테이블 형태로 저장한다.
 
 ## 2. SQL 쿼리문
 
@@ -108,6 +108,55 @@ normalized_scores_int_with_100_and_class as (
     join cutoffs as c
     group by nsih.mle_id
     order by norm_total desc
+),
+# 4. 미리 정의된 직원 분류 기준표에 따라 직원을 분류한 결과 column을 각 직원에 대해 추가한다.
+normalized_scores_final as (
+    select nsi.mle_id,
+           any_value(nsi.norm_perf) as norm_perf,
+           any_value(nsi.pct_perf) as pct_perf,
+           any_value(nsi.class_perf) as class_perf,
+           any_value(nsi.norm_comp) as norm_comp,
+           any_value(nsi.pct_comp) as pct_comp,
+           any_value(nsi.class_comp) as class_comp,
+           any_value(nsi.norm_atti) as norm_atti,
+           any_value(nsi.pct_atti) as pct_atti,
+           any_value(nsi.class_atti) as class_atti,
+           any_value(nsi.norm_total) as norm_total,
+           any_value(nsi.pct_total) as pct_total,
+           any_value(nsi.class_total) as class_total,
+           group_concat(c.class_name separator ' | ') as class_names
+    from normalized_scores_int_with_100_and_class as nsi
+    join mle_classification as c
+      on nsi.class_perf >= cast(substring(c.performance_range, 1, 1) as signed) and
+         nsi.class_perf <= cast(substring(c.performance_range, 3, 1) as signed) and
+         nsi.class_comp >= cast(substring(c.competency_range, 1, 1) as signed) and
+         nsi.class_comp <= cast(substring(c.competency_range, 3, 1) as signed) and
+         nsi.class_atti >= cast(substring(c.attitude_range, 1, 1) as signed) and
+         nsi.class_atti <= cast(substring(c.attitude_range, 3, 1) as signed)
+    group by nsi.mle_id
+    order by norm_total desc
+),
+# 5. 직원 분류 기준표의 각 기준에 속하는 직원의 인원수 및 비율 정보 및 해당 직원의 리스트를 각각 테이블 형태로 저장한다.
+# 5-1. 각 기준에 속하는 인원수 및 비율 정보
+count_info as (
+    select c.class_name as class_name,
+           any_value(c.performance_range) as performance_range,
+           any_value(c.competency_range) as competency_range,
+           any_value(c.attitude_range) as attitude_range,
+           count(case when nsi.class_names like concat('%', c.class_name, '%') then 1 end) as class_count
+    from mle_classification as c
+    join normalized_scores_final as nsi
+    group by c.class_name
+),
+ratio_info as (
+    select class_name,
+           performance_range,
+           competency_range,
+           attitude_range,
+           class_count,
+           class_count / (select count(*) from normalized_scores_final)
+    from count_info
+    order by performance_range, competency_range, attitude_range
 )
 ```
 
