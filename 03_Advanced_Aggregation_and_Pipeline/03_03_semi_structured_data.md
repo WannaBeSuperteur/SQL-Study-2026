@@ -38,7 +38,7 @@ SQL에서 반정형 데이터를 파싱하기 위한 함수는 다음과 같다.
 `EXPLODE` (또는 `JSON_TABLE`) 은 **배열 형태의 데이터의 각 원소를 행으로 펼치는** 함수이다.
 
 * MySQL 에서는 `EXPLODE` 대신 `JSON_TABLE` 함수를 이용하여 **JSON 형태의 데이터를 파싱** 할 수 있다.
-* `JSON_TABLE` 함수의 구분은 다음과 같다.
+* `JSON_TABLE` 함수의 구문은 다음과 같다.
 
 ```sql
 SELECT ...
