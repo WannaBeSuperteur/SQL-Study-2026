@@ -35,11 +35,11 @@
 
 * `ROWS BETWEEN` 에 정의된 키워드에 따라, **현재 row의 앞뒤 row를 포함하여 집계** 한다.
 
-| 키워드           | `ROWS BETWEEN` 과 함께 사용 시 예시                         | 설명                                               |
-|---------------|-----------------------------------------------------|--------------------------------------------------|
-| `N PRECEDING` | `ROWS BETWEEN UNBOUNDED PRECEIDING AND 1 PRECEDING` | 현재 행의 `N`개 행만큼 앞의 행 (`N` = `UNBOUNDED` 이면 첫 행)   |
-| `N FOLLOWING` | `ROWS BETWEEN 1 FOLLOWING AND UNBOUNDED FOLLOWING`  | 현재 행의 `N`개 행만큼 뒤쪽 행 (`N` = `UNBOUNDED` 이면 맨 끝 행) |
-| `CURRENT ROW` | `ROWS BETWEEN CURRENT ROW AND 3 FOLLOWING`          | 현재 행                                             |
+| 키워드           | `ROWS BETWEEN` 과 함께 사용 시 예시                        | 설명                                               |
+|---------------|----------------------------------------------------|--------------------------------------------------|
+| `N PRECEDING` | `ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING` | 현재 행의 `N`개 행만큼 앞의 행 (`N` = `UNBOUNDED` 이면 첫 행)   |
+| `N FOLLOWING` | `ROWS BETWEEN 1 FOLLOWING AND UNBOUNDED FOLLOWING` | 현재 행의 `N`개 행만큼 뒤쪽 행 (`N` = `UNBOUNDED` 이면 맨 끝 행) |
+| `CURRENT ROW` | `ROWS BETWEEN CURRENT ROW AND 3 FOLLOWING`         | 현재 행                                             |
 
 ## 2. 기본 `OVER (PARTITION BY ... ORDER BY ...)` 예제
 
