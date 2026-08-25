@@ -25,11 +25,11 @@
 | 08.22 토 (1d)               | 3-1. 다중 및 비등가 조인(Non-Equi Join)<br> - `LEFT JOIN`, `FULL OUTER JOIN`, 범위 조건 기반 조인을 활용한 레이블 데이터 결합     | ✅        |
 | 08.22 토 (1d)               | 3-2. CTE와 가독성 최적화<br> - `WITH` 절(Common Table Expression)을 활용한 복잡한 ML 데이터 추출 흐름 모듈화                   | ✅        |
 | 08.23 일 (1d)               | 3-3. 반정형 데이터 다루기<br> - JSON 파싱 및 배열(Array) 데이터 풀기(`UNNEST`, `EXPLODE`)                                | ✅        |
-| **08.23 일 - 08.24 월 (1d)** | **4. 시계열 및 윈도우 분석 (Window Functions)**                                                                | 💨       |
+| **08.23 일 - 08.24 월 (1d)** | **4. 시계열 및 윈도우 분석 (Window Functions)**                                                                | ✅        |
 | 08.23 일 (1d)               | 4-1. 순위 및 분위수 분할<br> - `ROW_NUMBER`, `DENSE_RANK`, `NTILE`을 활용한 그룹별 Top-K 추출 및 데이터 분할                 | ✅        |
 | 08.23 일 (1d)               | 4-2. 이동 합계 및 집계<br> - `OVER (PARTITION BY ... ORDER BY ... ROWS BETWEEN)`을 이용한 Rolling Feature 생성     | ✅        |
 | 08.23 일 (1d)               | 4-3. 시퀀스 데이터 및 지연 처리<br> - `LAG`, `LEAD` 함수를 활용한 이전/이후 시점 이벤트 추적 및 시계열 피처 구성                          | ✅        |
-| 08.23 일 - 08.25 화 (3d)     | SPECIAL PROJECT: 수능처럼 수습 평가 순위 매기기                                                                    | 💨       |
+| 08.23 일 - 08.25 화 (3d)     | SPECIAL PROJECT: 수능처럼 수습 평가 순위 매기기                                                                    | ✅        |
 | **08.25 화 (1d)**           | **5. 대용량 파이프라인 및 성능 최적화**                                                                             | ⬜        |
 | 08.25 화 (1d)               | 5-1. 실행 계획(EXPLAIN) 해석<br> - 쿼리 병목 지점 확인 및 조인 방식(Hash Join, Nested Loop 등) 이해                         | ⬜        |
 | 08.25 화 (1d)               | 5-2. 파티셔닝 및 클러스터링<br> - `PARTITION BY`, `CLUSTER BY`를 활용한 대용량 테이블 스캔 비용 단축                            | ⬜        |
