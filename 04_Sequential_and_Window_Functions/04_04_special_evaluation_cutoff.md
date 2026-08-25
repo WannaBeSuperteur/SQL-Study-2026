@@ -265,12 +265,16 @@ class_name         |performance_range|competency_range|attitude_range|class_coun
 
 ### 3-4. 각 분류 별 직원 리스트
 
+* 분류 이름: `성과는 높으나 태도 개선 필요군`
+
 ```sql
 employee_list_of_classification as (
     select nsi.mle_id,
 
 ...
 
+    where c.class_name = '성과는 높으나 태도 개선 필요군'
+)
 # 최종 출력
 select *
 from employee_list_of_classification;
