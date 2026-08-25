@@ -124,9 +124,9 @@ normalized_scores_final as (
            any_value(nsi.norm_total) as norm_total,
            any_value(nsi.pct_total) as pct_total,
            any_value(nsi.class_total) as class_total,
-           group_concat(c.class_name separator ' | ') as class_names
+           coalesce(group_concat(c.class_name separator ' | '), 'no class') as class_names
     from normalized_scores_int_with_100_and_class as nsi
-    join mle_classification as c
+    left join mle_classification as c  # left_join 사용 시 mle_classification 과 매칭이 안 되는 mle_id 도 처리 가능
       on nsi.class_perf >= cast(substring(c.performance_range, 1, 1) as signed) and
          nsi.class_perf <= cast(substring(c.performance_range, 3, 1) as signed) and
          nsi.class_comp >= cast(substring(c.competency_range, 1, 1) as signed) and
@@ -154,10 +154,29 @@ ratio_info as (
            competency_range,
            attitude_range,
            class_count,
-           class_count / (select count(*) from normalized_scores_final)
+           concat(round(100 * class_count / (select count(*) from normalized_scores_final), 2), '%')
     from count_info
     order by performance_range, competency_range, attitude_range
+),
+# 5-2. 각 기준의 해당 직원의 리스트 (예시)
+employee_list_of_classification as (
+    select nsi.mle_id,
+           nsi.class_perf as class_perf,
+           nsi.class_comp as class_comp,
+           nsi.class_atti as class_atti
+    from normalized_scores_final as nsi
+    join mle_classification as c
+      on nsi.class_perf >= cast(substring(c.performance_range, 1, 1) as signed) and
+         nsi.class_perf <= cast(substring(c.performance_range, 3, 1) as signed) and
+         nsi.class_comp >= cast(substring(c.competency_range, 1, 1) as signed) and
+         nsi.class_comp <= cast(substring(c.competency_range, 3, 1) as signed) and
+         nsi.class_atti >= cast(substring(c.attitude_range, 1, 1) as signed) and
+         nsi.class_atti <= cast(substring(c.attitude_range, 3, 1) as signed)
+    where c.class_name = '성과는 높으나 태도 개선 필요군'
 )
+# 최종 출력
+select *
+from normalized_scores_final;
 ```
 
 ## 3. 실행 결과
