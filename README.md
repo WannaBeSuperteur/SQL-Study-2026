@@ -32,6 +32,6 @@
 | 08.23 일 - 08.25 화 (3d)     | SPECIAL PROJECT: 수능처럼 수습 평가 순위 매기기                                                                    | ✅        |
 | **08.25 화 - 08.26 수 (2d)** | **5. 대용량 파이프라인 및 성능 최적화**                                                                             | 💨       |
 | 08.25 화 - 08.26 수 (2d)     | 5-1. 실행 계획(EXPLAIN) 해석<br> - 쿼리 병목 지점 확인 및 조인 방식(Hash Join, Nested Loop 등) 이해                         | ✅        |
-| 08.26 수 (1d)               | 5-2. 파티셔닝 및 클러스터링<br> - `PARTITION BY`, `CLUSTER BY`를 활용한 대용량 테이블 스캔 비용 단축                            | ⬜        |
+| 08.26 수 (1d)               | 5-2. 파티셔닝 및 클러스터링<br> - `PARTITION BY`, `GROUP BY`를 활용한 대용량 테이블 스캔 비용 단축                              | 💨       |
 | 08.26 수 (1d)               | 5-3. 데이터 샘플링 및 중복 제거<br> - `TABLESAMPLE`, `RANDOM()`, `ROW_NUMBER()` 기반 층화 추출(Stratified Sampling) 기법 | ⬜        |
 
