@@ -6,6 +6,7 @@
 * [2. 쿼리 병목 지점 확인 실습](#2-쿼리-병목-지점-확인-실습)
   * [2-1. 실행 계획 및 실제 실행 시간 분석](#2-1-실행-계획-및-실제-실행-시간-분석) 
   * [2-2. 테이블 입출력, scan 병목 확인](#2-2-테이블-입출력-scan-병목-확인) 
+  * [2-3. 지연을 유발하는 상위 쿼리 추적](#2-3-지연을-유발하는-상위-쿼리-추적) 
 * [3. 조인 방식 이해](#3-조인-방식-이해)
   * [3-1. Hash Join](#3-1-hash-join)
   * [3-2. Nested Loop Join](#3-2-nested-loop-join)
@@ -141,6 +142,55 @@ table_schema|table_name    |rows_fetched|io_read_requests|read_latency_ms|
 sys         |probation_data|      114559|              33|  0.00000000585|
 ```
 
+### 2-3. 지연을 유발하는 상위 쿼리 추적
+
+다음과 같이 상위 쿼리를 추적할 수 있다.
+
+```sql
+select *
+FROM sys.statement_analysis
+ORDER BY total_latency desc;
+```
+
+* 실행 결과
+
+```
+query                                                            |db |full_scan|exec_count|err_count|warn_count|total_latency|max_latency|avg_latency|lock_latency|cpu_latency|rows_sent|rows_sent_avg|rows_examined|rows_examined_avg|rows_affected|rows_affected_avg|tmp_tables|tmp_disk_tables|rows_sorted|sort_merge_passes|max_controlled_memory|max_total_memory|digest|first_seen                |last_seen                 |
+-----------------------------------------------------------------+---+---------+----------+---------+----------+-------------+-----------+-----------+------------+-----------+---------+-------------+-------------+-----------------+-------------+-----------------+----------+---------------+-----------+-----------------+---------------------+----------------+------+--------------------------+--------------------------+
+SELECT * FROM `sys` . `stateme ... tal_latency` DESC LIMIT ?, ...|sys|*        |         9|        0|         0|95.49 ms     |63.46 ms   |10.61 ms   |87.00 us    |  0 ps     |      530|           59|         1060|              118|            0|                0|         0|              0|        530|                0|1.17 MiB             |2.14 MiB        | ...  |2026-08-26 09:44:52.173877|2026-08-26 12:26:01.950486|
+SELECT * FROM `information_sch ... = ? AND `t` . `TABLE_NAME` = ?|   |         |         4|        0|         0|95.42 ms     |72.64 ms   |23.86 ms   |43.00 us    |  0 ps     |        4|            1|           12|                3|            0|                0|         0|              0|          0|                0|1.39 MiB             |1.92 MiB        | ...  |2026-08-23 20:12:08.769743|2026-08-26 08:33:52.857546|
+SELECT `WORD` FROM `INFORMATIO ... `RESERVED` = ? ORDER BY `WORD`|   |         |         4|        0|         0|90.20 ms     |49.96 ms   |22.55 ms   |59.00 us    |  0 ps     |     1048|          262|         2096|              524|            0|                0|         4|              0|       1048|                0|1.19 MiB             |1.81 MiB        | ...  |2026-08-23 20:12:08.550737|2026-08-26 08:33:52.470233|
+COMMIT                                                           |   |         |         3|        0|         0|9.71 ms      |4.99 ms    |3.24 ms    |  0 ps      |  0 ps     |        0|            0|            0|                0|            0|                0|         0|              0|          0|                0|18.05 KiB            |339.93 KiB      | ...  |2026-08-24 22:13:45.807469|2026-08-24 22:21:13.382301|
+SELECT `table_schema` , TABLE_ ... RE TABLE_NAME = ? LIMIT ?, ...|sys|*        |         3|        0|         3|9.63 ms      |3.87 ms    |3.21 ms    |7.00 us     |  0 ps     |        3|            1|            3|                1|            0|                0|         9|              0|          3|                0|1.29 MiB             |1.86 MiB        | ...  |2026-08-26 09:38:25.797786|2026-08-26 09:38:28.685240|
+SET `autocommit` = ?                                             |   |         |        34|        0|         0|9.17 ms      |653.00 us  |269.70 us  |  0 ps      |  0 ps     |        0|            0|            0|                0|            0|                0|         0|              0|          0|                0|18.05 KiB            |339.93 KiB      | ...  |2026-08-23 20:12:08.349402|2026-08-26 08:33:54.143983|
+SELECT QUERY AS `digest_text`  ... tal_latency` DESC LIMIT ?, ...|sys|*        |         1|        0|         0|82.55 ms     |82.55 ms   |82.55 ms   |50.00 us    |  0 ps     |        0|            0|           57|               57|            0|                0|         0|              0|          0|                0|1.21 MiB             |2.17 MiB        | ...  |2026-08-26 09:44:06.174564|2026-08-26 09:44:06.174564|
+SELECT QUERY AS `digest_text`  ... Y `total_latency` DESC LIMIT ?|sys|         |         1|        1|         0|8.86 ms      |8.86 ms    |8.86 ms    |38.00 us    |  0 ps     |        0|            0|            0|                0|            0|                0|         0|              0|          0|                0|1.25 MiB             |2.21 MiB        | ...  |2026-08-26 09:43:15.136612|2026-08-26 09:43:15.136612|
+SELECT `TABLE_SCHEMA` , TABLE_ ...  ? ORDER BY TABLE_NAME LIMIT ?|sys|*        |        38|        0|         0|70.60 ms     |5.04 ms    |1.86 ms    |202.00 us   |  0 ps     |        0|            0|        13862|              365|            0|                0|         0|              0|          0|                0|1.92 MiB             |2.46 MiB        | ...  |2026-08-23 21:30:34.995107|2026-08-25 22:02:59.021854|
+WITH `raw_salary_krw` AS ( SEL ... `salary_num` >= ? LIMIT ?, ...|sys|*        |         1|        0|        99|7.00 ms      |7.00 ms    |7.00 ms    |3.00 us     |  0 ps     |       67|           67|         2402|             2402|            0|                0|         1|              0|          0|                0|1.36 MiB             |1.70 MiB        | ...  |2026-08-26 09:27:17.135526|2026-08-26 09:27:17.135526|
+SELECT * FROM `information_sch ... CHEMATA` WHERE SCHEMA_NAME = ?|   |         |         1|        0|         0|693.40 us    |693.40 us  |693.40 us  |4.00 us     |  0 ps     |        1|            1|            4|                4|            0|                0|         0|              0|          0|                0|1.10 MiB             |1.38 MiB        | ...  |2026-08-24 22:13:45.466692|2026-08-24 22:13:45.466692|
+```
+
+* 실행 결과 해석
+
+| 컬럼                          | 설명                                               |
+|-----------------------------|--------------------------------------------------|
+| `query`                     | 실행한 쿼리 (normalized)                              |
+| `db`                        | 쿼리를 실행한 데이터베이스 (DB) (DB가 없을 경우 `NULL`)           |
+| `full_scan`                 | 전체 table scan 횟수                                 |
+| `exec_count`                | 전체 쿼리 실행 횟수                                      |
+| `error_count`               | 해당 쿼리 실행 시 발생한 전체 error 횟수                       |
+| `warn_count`                | 해당 쿼리 실행 시 발생한 전체 warning 횟수                     |
+| `total_latency`             | 해당 쿼리에 의한 **전체 wait latency** 의 합계               |
+| `max_latency` `avg_latency` | 해당 쿼리에 의한 **wait latency 발생 건의 최대, 평균 latency**  |
+| `lock_latency`              | 해당 쿼리에 의해 발생한 **lock 대기 시간의 합계**                 |
+| `rows_sent`                 | 해당 쿼리에 의해 반환된 **전체 row 개수**                      |
+| `rows_sent_avg`             | 해당 쿼리에 의해 반환된 **쿼리 실행 당 평균 row 개수**              |
+| `rows_affected`             | 해당 쿼리에 의해 영향을 받은 **전체 row 개수**                   |
+| `rows_affected_avg`         | 해당 쿼리에 의해 영향을 받은 **쿼리 실행 당 평균 row 개수**           |
+| `max_total_memory`          | 해당 쿼리에 의한 **전체 memory 사용량 (byte)** 의 최댓값         |
+| `first_seen`                | 해당 쿼리의 최초 발생 시각                                  |
+| `last_seen`                 | 해당 쿼리의 마지막 발생 시각                                 |
+
 ## 3. 조인 방식 이해
 
 ### 3-1. Hash Join
@@ -152,3 +202,4 @@ sys         |probation_data|      114559|              33|  0.00000000585|
 ## 4. 참고 자료
 
 * [MySQL 실행계획(explain) 정리 - Lifealong](https://0soo.tistory.com/235)
+* [30.4.3.35 The statement_analysis and x$statement_analysis Views - MySQL Official Document](https://dev.mysql.com/doc/refman/8.4/en/sys-statement-analysis.html)
