@@ -63,6 +63,15 @@ id|select_type|table         |partitions|type|possible_keys|key|key_len|ref|rows
 | `filtered`      | 데이터 유지/제거 비율                       |
 | `Extra`         | SQL 문 수행 관련 추가 정보                  |
 
+* `select_type` 설명
+
+| `select_type` 구분  | 설명                                        |
+|-------------------|-------------------------------------------|
+| `SIMPLE`          | 단순 `SELECT` 문 (UNION, sub-query 없음)       |
+| `PRIMARY`         | **sub-query 를 포함** 한 SELECT 문             |
+| `UNION`           | **union** 또는 **union all** 을 포함한 SELECT 문 |
+| `DEPENDENT_UNION` | `UNION` 과 동일 (단, 바깥쪽 쿼리에 의존성 있는 쿼리)       |
+
 ## 2. 쿼리 병목 지점 확인 실습
 
 ## 3. 조인 방식 이해
