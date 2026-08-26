@@ -193,13 +193,63 @@ SELECT * FROM `information_sch ... CHEMATA` WHERE SCHEMA_NAME = ?|   |         |
 
 ## 3. 조인 방식 이해
 
+| 조인 방식                       | 설명                                                                       |
+|-----------------------------|--------------------------------------------------------------------------|
+| 해시 조인 (Hash Join)           | **작은 테이블 (Build Input), 큰 테이블 (Probe Input)** 에 대해, 해시 함수를 이용하는 형태의 JOIN |
+| 중첩 루프 조인 (Nested Loop Join) | 두 테이블 중 **작은 테이블에서 조건에 일치하는 row를 큰 테이블에서 반복 탐색**                         |
+| 병합 조인 (Merge Join)          | 두 테이블을 **조인 컬럼 기준 오름차순 정렬** 후, 정렬된 조인 대상 키를 스캔하는 방식                      |
+
 ### 3-1. Hash Join
+
+**해시 조인 (Hash Join)** 은 해시 함수를 이용하는 형태의 조인이다.
+
+* 테이블 정의
+
+| 작은 테이블              | 큰 테이블                |
+|---------------------|----------------------|
+| Build Input (빌드 입력) | Probe Input (프로브 입력) |
+
+* 해시 조인 방법
+  * Build Input 테이블에서 JOIN 되는 컬럼에 **해시 함수 적용**
+  * 해당 해시 함수를 통해 **해시 키 (Hash Key)** 및 **해시 테이블 (Hash Table)** 생성
+  * Probe Input 테이블에서 **해당 해시 테이블에서 같은 hash key를 찾아서 JOIN 실시**
+
+* 해시 조인의 특징
+  * Nested Loop, Merge Join에 비해 **조인 속도가 빠름**
+  * 해시 함수 및 해시 테이블 사용
+  * **동등 조건 (=)** 필요
 
 ### 3-2. Nested Loop Join
 
+**중첩 루프 조인 (Nested Loop Join, NL Join)** 은 JOIN 되는 두 테이블 중 **작은 테이블의 레코드를 탐색하여 JOIN** 하는 것이다.
+
+| 작은 테이블      | 큰 테이블       |
+|-------------|-------------|
+| Outer Table | Inner Table |
+
+* 중첩 루프 조인 방법
+  * Outer Table 에서 **JOIN 조건을 만족시키는 row** 를 찾음
+  * 해당 row를 Inner Table 에서 반복적으로 탐색
+
+* 중첩 루프 조인의 특징
+  * JOIN 대상 컬럼에 대한 **인덱스 필수**
+  * 두 테이블의 **모든 조합 비교 (random access, 즉 직접 접근 방식)**
+  * **작은 크기의 데이터** 에 적합 (데이터를 모두 액세스해야 하므로 큰 데이터에서는 비효율적)
+
 ### 3-3. Merge Join
+
+**Merge Join (병합 조인, Sort Merge Join)** 은 **조인 대상 컬럼 기준 오름차순 정렬** 후, 정렬된 key 기준으로 탐색하여 JOIN 결과를 생성한다.
+
+* Merge Join 특징
+  * Nested Loop Join의 **큰 데이터에서의 비효율성** 개선
+    * **양쪽 테이블을 한번에 access** 한 후, 정렬을 통해 보다 빠르게 비교 및 탐색 가능
+  * 정렬 작업 비용 발생
+  * 대량의 데이터에 효율적
+  * **동등 조건 (=)** 필요
+  * **중복 데이터 제거** 필요 (이때, 중복 제거를 위한 **임시 테이블** 비용 발생)
 
 ## 4. 참고 자료
 
 * [MySQL 실행계획(explain) 정리 - Lifealong](https://0soo.tistory.com/235)
 * [30.4.3.35 The statement_analysis and x$statement_analysis Views - MySQL Official Document](https://dev.mysql.com/doc/refman/8.4/en/sys-statement-analysis.html)
+* [[Database] JOIN 기법의 종류 (Nested Loops Join, Merge Join, Hash Join) - (ง •̀_•́)ง✧](https://ryean.tistory.com/73)
