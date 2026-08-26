@@ -4,6 +4,8 @@
 * [1. `EXPLAIN` 함수 설명](#1-explain-함수-설명)
   * [1-1. `EXPLAIN` 함수의 상세 해석 방법](#1-1-explain-함수의-상세-해석-방법)
 * [2. 쿼리 병목 지점 확인 실습](#2-쿼리-병목-지점-확인-실습)
+  * [2-1. 실행 계획 및 실제 실행 시간 분석](#2-1-실행-계획-및-실제-실행-시간-분석) 
+  * [2-2. 테이블 입출력, scan 병목 확인](#2-2-테이블-입출력-scan-병목-확인) 
 * [3. 조인 방식 이해](#3-조인-방식-이해)
   * [3-1. Hash Join](#3-1-hash-join)
   * [3-2. Nested Loop Join](#3-2-nested-loop-join)
@@ -73,6 +75,71 @@ id|select_type|table         |partitions|type|possible_keys|key|key_len|ref|rows
 | `DEPENDENT_UNION` | `UNION` 과 동일 (단, 바깥쪽 쿼리에 의존성 있는 쿼리)       |
 
 ## 2. 쿼리 병목 지점 확인 실습
+
+### 2-1. 실행 계획 및 실제 실행 시간 분석
+
+실행 계획 및 실행 시간 분석을 위해서는 `EXPLAIN ANALYZE` 를 사용한다.
+
+* SQL 쿼리
+
+```sql
+explain analyze
+with raw_salary_krw as (
+    select mle_id,
+           cast(REGEXP_REPLACE(raw_salary_krw, '[^0-9]', '') as signed) as salary_num
+    from probation_data
+)
+select
+  distinct coalesce(rsk.mle_id, pd.mle_id) as mle_id,
+  pd.department_team,
+  rsk.salary_num
+from probation_data as pd
+join raw_salary_krw as rsk
+  on pd.mle_id = rsk.mle_id 
+where pd.department_team = 'LLM & Generative AI'
+  and rsk.salary_num >= 77889900;
+```
+
+* 실행 결과
+
+```
+-> Table scan on <temporary>  (cost=1617..1637 rows=1350) (actual time=4.63..4.64 rows=67 loops=1)
+    -> Temporary table with deduplication  (cost=1617..1617 rows=1350) (actual time=4.63..4.63 rows=67 loops=1)
+        -> Inner hash join (probation_data.mle_id = pd.mle_id)  (cost=1482 rows=1350) (actual time=1.11..3.69 rows=603 loops=1)
+            -> Filter: (cast(regexp_replace(probation_data.raw_salary_krw,'[^0-9]','') as signed) >= 77889900)  (cost=0.174 rows=116) (actual time=0.0362..2.33 rows=937 loops=1)
+                -> Table scan on probation_data  (cost=0.174 rows=1162) (actual time=0.0061..1.02 rows=1201 loops=1)
+            -> Hash
+                -> Filter: (pd.department_team = 'LLM & Generative AI')  (cost=123 rows=116) (actual time=0.0398..0.96 rows=255 loops=1)
+                    -> Table scan on pd  (cost=123 rows=1162) (actual time=0.0224..0.819 rows=1201 loops=1)
+```
+
+* 실행 결과 해석
+  * 2개의 테이블을 조인할 때, `Inner hash join` 으로 조인한다.
+  * `actual time` 을 통해 실제 실행 시간을 알 수 있다.
+  * `rows` 를 통해 결과 row의 개수를 확인할 수 있다.
+
+### 2-2. 테이블 입출력, scan 병목 확인
+
+다음과 같이 **MySQL의 `sys` 스키마를 이용** 하여 행 수, 지연 시간 등을 확인할 수 있다.
+
+```sql
+SELECT 
+  table_schema,
+  table_name,
+  rows_fetched,
+  io_read_requests,
+  io_read_latency / 1000000000 AS read_latency_ms
+FROM sys.schema_table_statistics
+WHERE table_name = 'probation_data';
+```
+
+* 실행 결과
+
+```
+table_schema|table_name    |rows_fetched|io_read_requests|read_latency_ms|
+------------+--------------+------------+----------------+---------------+
+sys         |probation_data|      114559|              33|  0.00000000585|
+```
 
 ## 3. 조인 방식 이해
 
