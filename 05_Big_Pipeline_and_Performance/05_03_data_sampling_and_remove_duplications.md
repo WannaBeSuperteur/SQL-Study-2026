@@ -5,7 +5,7 @@
   * [1-1. `TABLESAMPLE` 함수](#1-1-tablesample-함수) 
   * [1-2. `RANDOM` 함수](#1-2-random-함수)
   * [1-3. `ROW_NUMBER` 함수](#1-3-rownumber-함수)
-* [2. 층화 추출 (Startified Sampling) 실습](#2-층화-추출-startified-sampling-실습)
+* [2. 층화 추출 (Stratified Sampling) 실습](#2-층화-추출-stratified-sampling-실습)
 * [3. 참고 문서](#3-참고-문서)
 
 ## 1. 함수 설명
@@ -74,7 +74,7 @@ row_num|mle_id       |
      10|MLE-2023-0013|
 ```
 
-## 2. 층화 추출 (Startified Sampling) 실습
+## 2. 층화 추출 (Stratified Sampling) 실습
 
 ## 3. 참고 문서
 
